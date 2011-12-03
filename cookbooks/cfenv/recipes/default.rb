@@ -52,3 +52,17 @@ service "coldfusion" do
   supports :status => true, :restart => true, :reload => false
   action [ :enable, :restart ]
 end
+
+# update jrun-web.xml to point the web root at /var/www/sites/localhost
+# instead of the default. This folder is mounted from the host.
+cookbook_file "#{node[:cfenv][:jrun_xml]}" do
+  source "jrun-web.xml"
+  mode 0644
+  owner "root"
+  group "root"
+  ignore_failure true
+end
+
+service "coldfusion" do
+  action :restart
+end
